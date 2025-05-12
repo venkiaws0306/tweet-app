@@ -10,16 +10,15 @@ pipeline {
                         sh "mvn compiler:compile"
                     }
                 }
-          }
-    stages {
+   
          stage('Build') {
                     steps {
                         sh "mvn clean package"
                     }
                 }
-          }
 
-    
+        
+          } 
 }
 
 
