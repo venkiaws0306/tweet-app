@@ -3,18 +3,23 @@ pipeline {
     tools {
             maven 'maven3'
         }
+    
     stages {
          stage('complile') {
                     steps {
-                        bat "mvn compiler:compile"
+                        sh "mvn compiler:compile"
                     }
                 }
-        stage('Build') {
+          }
+    stages {
+         stage('Build') {
                     steps {
-                        bat "mvn clean deploy"
+                        sh "mvn clean package"
                     }
                 }
-    }
+          }
+
+    
 }
 
 
