@@ -29,13 +29,16 @@ pipeline {
             }
         }
         
-        stage('SonarQube analysis') {
+             
+        stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('SonarServer') { 
-                  sh"${SCANNER_HOME}/bin/sonar-scanner-url"
+                withSonarQubeEnv('SonarServer') {
+                    // Use backslashes and .bat for Windows
+                    bat "\"${env.SCANNER_HOME}\\bin\\sonar-scanner.bat\""
                 }
             }
         }
+    
         
     }
 }
