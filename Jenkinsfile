@@ -6,7 +6,7 @@ pipeline {
     }
     
     environment{
-        SCANNER_HOME = tool 'sonar-scanner'
+        SCANNER_HOME = tool 'sonar-scanner-url'
     }
 
     stages {
@@ -34,8 +34,12 @@ pipeline {
             }
         }
         
-    
-       
+        stage('SonarQube analysis') {
+            withSonarQubeEnv('my sonarqube serverURL') { // You can override the credential to be used, If you have configured more than one global server connection, you can specify the corresponding SonarQube installation name configured in Jenkins
+              sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.11.0.3922:sonar'
+                sh"${SCANNER_HOME}/bin/sonar-scanner-url"
+            }
+        }
         
     }
 }
