@@ -32,7 +32,7 @@ pipeline {
         stage('SonarQube analysis') {
             steps {
                 withSonarQubeEnv('SonarServer') { 
-                  sh"${SCANNER_HOME}/bin/sonar-scanner"
+                  sh"${SCANNER_HOME}/bin/sonar-scanner-url"
                 }
             }
         }
