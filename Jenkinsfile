@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Git checkout/SCM') {
             steps {
-                 git branch: 'main', url: 'https://github.com/venkiaws0306/Boardgame.git'
+                 git branch: 'main', url: 'https://github.com/venkiaws0306/tweet-app.git'
             }
         }
         
