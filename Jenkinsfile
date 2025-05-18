@@ -37,7 +37,7 @@ pipeline {
             steps {
                  echo "-----------------------Unit Test started -----------------"
 				 sh "mvn surefire-report:report"
-			     echo "-----------------------Unit Test completed -----------------"
+		echo "-----------------------Unit Test completed -----------------"
             }
         }
         
@@ -90,20 +90,23 @@ stage("Jar Publish") {
       }
     }
 
-            stage (" Docker Publish "){
-        steps {
-            script {
-               echo '<--------------- Docker Publish Started --------------->'  
-                docker.withRegistry(registry, 'Jenkins-access-token'){
-                    app.push()
-                }    
-               echo '<--------------- Docker Publish Ended --------------->'  
+
+stage('Docker Publish') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(
+                        credentialsId: 'docker-cred',
+                        usernameVariable: 'DOCKER_HUB_CREDENTIALS_USR',
+                        passwordVariable: 'DOCKER_HUB_CREDENTIALS_PSW'
+                    )]) {
+                        sh "echo ${DOCKER_HUB_CREDENTIALS_PSW} | docker login -u ${DOCKER_HUB_CREDENTIALS_USR} --password-stdin"
+                        #def imageTag = "${env.DOCKER_IMAGE_NAME}:${env.DOCKER_IMAGE_TAG}"
+                        #sh "docker push ${imageTag}"
+			app.push()
+                    }
+                }
             }
         }
-    }
-
-
-
 
 	    
 	    
