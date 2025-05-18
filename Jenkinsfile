@@ -1,4 +1,6 @@
 def registry = 'https://trialz4ixqj.jfrog.io'
+def imageName = 'trialz4ixqj.jfrog.io/artifactory/galaxy-docker-local/ttrend'
+def version   = '2.1.2'
 
 pipeline {
     agent any
@@ -77,6 +79,33 @@ stage("Jar Publish") {
         }   
     }
 
+
+ stage(" Docker Build ") {
+      steps {
+        script {
+           echo '<--------------- Docker Build Started --------------->'
+           app = docker.build(imageName+":"+version)
+           echo '<--------------- Docker Build Ends --------------->'
+        }
+      }
+    }
+
+            stage (" Docker Publish "){
+        steps {
+            script {
+               echo '<--------------- Docker Publish Started --------------->'  
+                docker.withRegistry(registry, 'Jenkins-access-token'){
+                    app.push()
+                }    
+               echo '<--------------- Docker Publish Ended --------------->'  
+            }
+        }
+    }
+
+
+
+
+	    
 	    
 
 	    
