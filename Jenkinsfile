@@ -100,9 +100,7 @@ stage('Docker Publish') {
                         passwordVariable: 'DOCKER_HUB_CREDENTIALS_PSW'
                     )]) {
                         sh "echo ${DOCKER_HUB_CREDENTIALS_PSW} | docker login -u ${DOCKER_HUB_CREDENTIALS_USR} --password-stdin"
-                        #def imageTag = "${env.DOCKER_IMAGE_NAME}:${env.DOCKER_IMAGE_TAG}"
-                        #sh "docker push ${imageTag}"
-			app.push()
+                        app.push()
                     }
                 }
             }
