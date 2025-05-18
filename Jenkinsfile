@@ -11,6 +11,8 @@ pipeline {
     
     environment{
         SCANNER_HOME = tool 'sonar-scanner-url'
+	DOCKER_IMAGE_NAME = 'venkiaws/ttrend'
+        DOCKER_IMAGE_TAG = '2.1.2'
     }
 
     stages {
@@ -79,19 +81,16 @@ stage("Jar Publish") {
         }   
     }
 
-
- stage(" Docker Build ") {
-      steps {
-        script {
-           echo '<--------------- Docker Build Started --------------->'
-           app = docker.build(imageName+":"+version)
-           echo '<--------------- Docker Build Ends --------------->'
+ stage('Build Docker Image') {
+            steps {
+                script {
+                    def imageTag = "${env.DOCKER_IMAGE_NAME}:${env.DOCKER_IMAGE_TAG}"
+                    sh "docker build -t ${imageTag} ."
+                }
+            }
         }
-      }
-    }
 
-
-stage('Docker Publish') {
+        stage('Docker Login and Push Image') {
             steps {
                 script {
                     withCredentials([usernamePassword(
@@ -100,13 +99,12 @@ stage('Docker Publish') {
                         passwordVariable: 'DOCKER_HUB_CREDENTIALS_PSW'
                     )]) {
                         sh "echo ${DOCKER_HUB_CREDENTIALS_PSW} | docker login -u ${DOCKER_HUB_CREDENTIALS_USR} --password-stdin"
-                        app.push()
+                        def imageTag = "${env.DOCKER_IMAGE_NAME}:${env.DOCKER_IMAGE_TAG}"
+                        sh "docker push ${imageTag}"
                     }
                 }
             }
         }
-
-	    
 	    
 
 	    
